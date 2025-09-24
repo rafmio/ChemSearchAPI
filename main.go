@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -32,6 +32,15 @@ func main() {
 	fmt.Println(clientId)
 	fmt.Println(clientSecret)
 
+	// conf := &oauth2.Config{
+	// 	ClientID:     clientId,
+	// 	ClientSecret: clientSecret,
+	// 	Endpoint: oauth2.Endpoint{
+	// 		AuthURL:  "https://oauth.yandex.ru/authorize",
+	// 		TokenURL: "https://oauth.yandex.ru/token",
+	// 	},
+	// 	Scopes: []string{"direct"},
+	// }
 	conf := &oauth2.Config{
 		ClientID:     clientId,
 		ClientSecret: clientSecret,
@@ -40,12 +49,17 @@ func main() {
 			TokenURL: "https://oauth.yandex.ru/token",
 		},
 		Scopes: []string{"direct"},
+		// Явно укажите передачу параметров в теле запроса
+		// RedirectURL: "https://oauth.yandex.ru/verification_code", // Ваш redirect_uri
+		RedirectURL: "https://api.wordstat.yandex.net", // Ваш redirect_uri
 	}
 
 	token, err := conf.Exchange(context.Background(), code)
 	if err != nil {
 		log.Fatalf("Failed to exchange auth code for token: %v", err)
 	}
+
+	fmt.Println("checkpoint 1")
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, http.DefaultClient)
 	httpClient := conf.Client(ctx, token)
@@ -63,7 +77,7 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	responseData, _ := ioutil.ReadAll(resp.Body)
+	responseData, _ := io.ReadAll(resp.Body)
 	var statsResp StatsResponse
 	err = json.Unmarshal(responseData, &statsResp)
 	if err != nil {
