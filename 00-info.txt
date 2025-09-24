@@ -1,0 +1,13 @@
+Wordstat's page: https://wordstat.yandex.ru/
+Description: https://yandex.ru/support2/wordstat/ru/
+Wordstat API's page: https://yandex.ru/support2/wordstat/ru/content/api-wordstat
+
+Yandex ID OAuth: https://oauth.yandex.ru/
+
+ClientID: fbd1eed6387846c284af560bdb8d33ea
+Client secret: c3f3dfb8a0c64e9c97af1c00ed706e7e
+
+
+Redirect URI: https://oauth.yandex.ru/verification_code
+
+API structure: https://yandex.ru/support2/wordstat/ru/content/api-structure
